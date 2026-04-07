@@ -4,9 +4,9 @@ pipeline {
 
     // Variables used across all stages
     environment {
-        DOCKER_IMAGE = "YOUR_USERNAME/task-api"
+        DOCKER_IMAGE = "samm11000/task-api"
         DOCKER_TAG   = "${BUILD_NUMBER}"  // auto-increments
-        APP_SERVER   = "13.235.xx.xx"
+        APP_SERVER = "13.203.157.50"
     }
 
     stages {
