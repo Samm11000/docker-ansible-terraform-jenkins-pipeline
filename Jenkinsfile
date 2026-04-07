@@ -71,7 +71,7 @@ pipeline {
             steps {
                 script {
                     sleep(10)  // wait for container to start
-                    sh "curl -f http://${APP_SERVER}/health || exit 1"
+                    sh "curl -f http://${APP_SERVER}:3000/health || exit 1"
                     echo 'App is healthy!'
                 }
             }
