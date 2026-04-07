@@ -1,0 +1,7 @@
+---
+- name: Deploy Task API to App Server
+  hosts: app_servers
+  become: yes
+
+  roles:
+    - deploy-app

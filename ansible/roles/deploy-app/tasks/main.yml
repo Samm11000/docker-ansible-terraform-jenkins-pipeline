@@ -1,0 +1,51 @@
+---
+- name: Install dependencies
+  apt:
+    name:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - software-properties-common
+    state: present
+    update_cache: yes
+
+- name: Add Docker GPG key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+- name: Add Docker repo
+  apt_repository:
+    repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
+    state: present
+
+- name: Install Docker
+  apt:
+    name: docker-ce
+    state: present
+
+- name: Start Docker
+  service:
+    name: docker
+    state: started
+    enabled: yes
+
+- name: Pull Docker image
+  docker_image:
+    name: "samm11000/task-api:latest"
+    source: pull
+    force_source: yes
+
+- name: Remove old container
+  docker_container:
+    name: task-api
+    state: absent
+
+- name: Run new container
+  docker_container:
+    name: task-api
+    image: "samm11000/task-api:latest"
+    state: started
+    restart_policy: always
+    ports:
+      - "3000:3000"
