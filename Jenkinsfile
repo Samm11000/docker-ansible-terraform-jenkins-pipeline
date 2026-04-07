@@ -46,19 +46,26 @@ pipeline {
             }
         }
 
-        stage('Deploy with Ansible') {
-            steps {
-                script {
-                    // Run Ansible playbook to deploy to app server
-                    sh """
-                        ansible-playbook \
-  -i ansible/inventory.ini \
-  ansible/deploy.yml \
-  -e "docker_image=${DOCKER_IMAGE}:${DOCKER_TAG}"
-                    """
-                }
+       stage('Deploy with Ansible') {
+    steps {
+        script {
+            withCredentials([sshUserPrivateKey(
+                credentialsId: 'ec2-key',
+                keyFileVariable: 'SSH_KEY'
+            )]) {
+                sh """
+                ansible-playbook \
+                  -i ansible/inventory.ini \
+                  ansible/deploy.yml \
+                  -e "docker_image=${DOCKER_IMAGE}:${DOCKER_TAG}" \
+                  --private-key $SSH_KEY \
+                  --ssh-extra-args='-o StrictHostKeyChecking=no'
+                """
             }
         }
+    }
+}
+           
 
         stage('Health Check') {
             steps {
