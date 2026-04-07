@@ -52,10 +52,9 @@ pipeline {
                     // Run Ansible playbook to deploy to app server
                     sh """
                         ansible-playbook \
-                          -i ansible/inventory.ini \
-                          ansible/deploy.yml \
-                          --vault-password-file ~/.vault_pass \
-                          -e "docker_image=${DOCKER_IMAGE}:${DOCKER_TAG}"
+  -i ansible/inventory.ini \
+  ansible/deploy.yml \
+  -e "docker_image=${DOCKER_IMAGE}:${DOCKER_TAG}"
                     """
                 }
             }
